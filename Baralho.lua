@@ -18,7 +18,7 @@ function Baralho:reset()
     --self.y =
 end
 
-function Baralho:update(dt)
+function Baralho:muda()
     self.numero = math.random(1,13)
 end
 

@@ -14,7 +14,23 @@ function love.load()
     cardHeight = 150
     cardX = WINDOW_WIDTH/2 - cardWidth/2
     cardY = WINDOW_HEIGHT/3 - cardHeight/2
+
+    sounds = {
+        [1] = love.audio.newSource('audio/1.wav', "static"),
+        [2] = love.audio.newSource('audio/2.wav', "static"),
+        [3] = love.audio.newSource('audio/3.wav', "static"),
+        [4] = love.audio.newSource('audio/4.wav', "static"),
+        [5] = love.audio.newSource('audio/5.wav', "static"),
+        [6] = love.audio.newSource('audio/6.wav', "static"),
+        [7] = love.audio.newSource('audio/7.wav', "static"),
+        [8] = love.audio.newSource('audio/8.wav', "static"),
+        [9] = love.audio.newSource('audio/9.wav', "static"),
+        [10] = love.audio.newSource('audio/10.wav', "static"),
+        [11] = love.audio.newSource('audio/11.wav', "static"),
+        [12] = love.audio.newSource('audio/12.wav', "static"),
+        [13] = love.audio.newSource('audio/13.wav', "static"),
     
+    }
     
     love.window.setTitle('Reflexo')
     
@@ -24,13 +40,19 @@ function love.load()
         vsync = true
     })
     
-    handWidth = 70
-    handHeight = 100
-    handX = WINDOW_WIDTH/2 - handWidth/2
-    handY = WINDOW_HEIGHT - cardHeight - 30
+    handsWidth = 70
+    handsHeight = 100
+
+    hand1X = WINDOW_WIDTH/4 - handsWidth/2
+    hand1Y = WINDOW_HEIGHT - handsHeight - 30
+    hand2X = WINDOW_WIDTH *3/4 - handsWidth/2
+    hand2Y = WINDOW_HEIGHT - handsHeight - 30
     
 
-    jogador1 = Mao(handX,handY,handWidth,handHeight)
+    jogador1 = Mao(hand1X,hand1Y,handsWidth,handsHeight,'blue')
+
+    jogador2 = Mao(hand2X,hand2Y,handsWidth,handsHeight,'purple')
+
     cartasJogador1 = 0
 
     
@@ -39,7 +61,7 @@ function love.load()
     love.keyboard.keysPressed = {}
 
 
-    contador = 1
+    contador = 0
     dtotal = 0
     monte = 0
     pontosJogador1 = 0
@@ -62,16 +84,18 @@ function love.update(dt)
 
     dtotal = dtotal + dt
     if dtotal >= 2 then
-        baralho:update(dt)
+        baralho:muda()
         dtotal = dtotal - 2
         contador = contador + 1
         monte = monte + 1
         if contador > 13 then
             contador = 1
         end
+        sounds[contador]:play()
     end
 
     if love.keyboard.wasPressed('a') then
+        jogador1:update(dt)
         if contador ~= baralho.numero then
             monte = monte + pontosJogador1
             pontosJogador1 = 0
@@ -93,6 +117,7 @@ function love.draw()
     love.graphics.clear(126/255, 161/255, 255/255, 1)
     baralho:render()
     jogador1:render()
+    jogador2:render()
     love.graphics.setColor(1,1,1,1)
     love.graphics.print(tostring(contador), WINDOW_WIDTH*2/3, WINDOW_HEIGHT/4)
     love.graphics.print(tostring(monte), WINDOW_WIDTH*2/3, WINDOW_HEIGHT*2/4)
