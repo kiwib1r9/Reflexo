@@ -7,14 +7,11 @@ function love.load()
     -- random seed 
     math.randomseed(os.time())
 
+    -- tamanho da tela
     WINDOW_HEIGHT = 620
     WINDOW_WIDTH = 620
 
-    cardWidth = 100
-    cardHeight = 150
-    cardX = WINDOW_WIDTH/2 - cardWidth/2
-    cardY = WINDOW_HEIGHT/3 - cardHeight/2
-
+    -- inicializaçao do som
     sounds = {
         [1] = love.audio.newSource('audio/1.wav', "static"),
         [2] = love.audio.newSource('audio/2.wav', "static"),
@@ -32,6 +29,7 @@ function love.load()
     
     }
     
+
     love.window.setTitle('Reflexo')
     
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -39,7 +37,14 @@ function love.load()
         resizable = false,
         vsync = true
     })
-    
+
+    -- tamanho e posiçao das cartas
+    cardWidth = 100
+    cardHeight = 150
+    cardX = WINDOW_WIDTH/2 - cardWidth/2
+    cardY = WINDOW_HEIGHT/3 - cardHeight/2
+
+    -- tamanho e posicao 
     handsWidth = 70
     handsHeight = 100
 
@@ -48,23 +53,20 @@ function love.load()
     hand2X = WINDOW_WIDTH *3/4 - handsWidth/2
     hand2Y = WINDOW_HEIGHT - handsHeight - 30
     
-
+    -- inicializaçao dos elementos
     jogador1 = Mao(hand1X,hand1Y,handsWidth,handsHeight,'blue')
-
     jogador2 = Mao(hand2X,hand2Y,handsWidth,handsHeight,'purple')
-
-    cartasJogador1 = 0
-
-    
     baralho = Baralho(cardX,cardY,cardWidth,cardHeight,0,1)
 
-    love.keyboard.keysPressed = {}
-
+    -- pontuaçao inicial e parametros zerada
 
     contador = 0
     dtotal = 0
     monte = 0
     pontosJogador1 = 0
+    pontosJogador2 = 0
+
+    love.keyboard.keysPressed = {}
 
     
 end
@@ -82,6 +84,7 @@ end
 
 function love.update(dt)
 
+    jogador1:update(dt)
     dtotal = dtotal + dt
     if dtotal >= 2 then
         baralho:muda()
@@ -95,7 +98,8 @@ function love.update(dt)
     end
 
     if love.keyboard.wasPressed('a') then
-        jogador1:update(dt)
+        -- animaçao de tapa
+        jogador1:animar()
         if contador ~= baralho.numero then
             monte = monte + pontosJogador1
             pontosJogador1 = 0

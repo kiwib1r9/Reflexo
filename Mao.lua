@@ -7,20 +7,35 @@ function Mao:init(x,y,largura,altura,color)
     self.altura = altura
     self.color = color
 
-    --self.dx=
-    self.dy=-300
+    self.dy=-1000
+    self.tempo = 0
+    self.inicialX = x 
+    self.inicialY = y
+    self.tapa = false
+    self.duracao = 0.3
 
 end
 
 function Mao:reset()
     -- reseta a posição da mão
-    --self.x =
-    --self.y =
+    self.x = self.inicialX
+    self.y = self.inicialY
+    self.tapa = false
 end
 
+function Mao:animar()
+    self.tempo = 0
+    self.tapa = true
+end
 
 function Mao:update(dt)
-    self.y = self.y + self.dy*dt
+    if self.tapa then
+        self.tempo = self.tempo + dt
+        self.y = self.y + self.dy * dt
+        if self.tempo >= self.duracao then
+            self:reset()
+        end
+    end
 end
 
 function Mao:render()
