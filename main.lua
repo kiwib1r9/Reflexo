@@ -29,7 +29,7 @@ function love.load()
     
     }
     
-
+    -- inicializacao janela
     love.window.setTitle('Reflexo')
     
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -44,6 +44,7 @@ function love.load()
     cardX = WINDOW_WIDTH/2 - cardWidth/2
     cardY = WINDOW_HEIGHT/3 - cardHeight/2
 
+
     -- tamanho e posicao 
     handsWidth = 70
     handsHeight = 100
@@ -54,12 +55,11 @@ function love.load()
     hand2Y = WINDOW_HEIGHT - handsHeight - 30
     
     -- inicializaçao dos elementos
-    jogador1 = Mao(hand1X,hand1Y,handsWidth,handsHeight,'blue')
-    jogador2 = Mao(hand2X,hand2Y,handsWidth,handsHeight,'purple')
+    jogador1 = Mao(hand1X,hand1Y,1)
+    jogador2 = Mao(hand2X,hand2Y,2)
     baralho = Baralho(cardX,cardY,cardWidth,cardHeight,0,1)
 
     -- pontuaçao inicial e parametros zerada
-
     contador = 0
     dtotal = 0
     monte = 0
@@ -85,6 +85,7 @@ end
 function love.update(dt)
 
     jogador1:update(dt)
+    jogador2:update(dt)
     dtotal = dtotal + dt
     if dtotal >= 2 then
         baralho:muda()
@@ -98,6 +99,7 @@ function love.update(dt)
     end
 
     if love.keyboard.wasPressed('a') then
+        -- só deixar 1 vez
         -- animaçao de tapa
         jogador1:animar()
         if contador ~= baralho.numero then
@@ -112,12 +114,30 @@ function love.update(dt)
             -- pontua o numero de cartas do monte
         end
     end
+
+    if love.keyboard.wasPressed('return') then
+        -- só deixar 1 vez
+        -- animaçao de tapa
+        jogador2:animar()
+        if contador ~= baralho.numero then
+            monte = monte + pontosJogador2
+            pontosJogador2 = 0
+            -- queimou!! perde todos os pontos para a mesa
+            print("queimou")
+        else 
+            pontosJogador2 = pontosJogador2 + monte
+            monte = 0
+            print("attack")
+            -- pontua o numero de cartas do monte
+        end
+    end
     love.keyboard.keysPressed = {}
 
  
 end
 
 function love.draw()
+    
     love.graphics.clear(126/255, 161/255, 255/255, 1)
     baralho:render()
     jogador1:render()
