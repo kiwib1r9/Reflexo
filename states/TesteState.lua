@@ -18,7 +18,7 @@ function TesteState:update(dt)
         end
         sounds[contador]:play()
 
-        if baralho.numero == contador then
+        if baralho.numero == contador or topoJogador1 == contador or topoJogador2 == contador then
             gStateMachine:change('point')
         end
     end
@@ -26,10 +26,12 @@ function TesteState:update(dt)
     if inTable(keyQueue ,'a') then
             monte = monte + pontosJogador1
             pontosJogador1 = 0
+            topoJogador1 = 0
     end
     if inTable(keyQueue ,'return') then
             monte = monte + pontosJogador2
             pontosJogador2 = 0
+            topoJogador2 = 0
     end
 
 
@@ -38,13 +40,4 @@ end
 function TesteState:render()
   love.graphics.print('inicio', 20, 64)
   love.graphics.print(tostring(count), 20, 100)
-end
-
-function inTable(table, val)
-    for i, v in ipairs(table) do
-        if v == val then
-            return true
-        end
-    end
-    return false
 end

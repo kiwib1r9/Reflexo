@@ -6,6 +6,7 @@ require 'StateMachine'
 require 'states/BaseState'
 require 'states/InicioState'
 require 'states/TesteState'
+require 'states/PointState'
 
 function love.load()
 
@@ -68,8 +69,12 @@ function love.load()
     contador = 0
     dtotal = 0
     monte = 0
-    pontosJogador1 = 10
-    pontosJogador2 = 9
+    pontosJogador1 = 0
+    pontosJogador2 = 0
+    topoJogador1 = 0
+    topoJogador2 = 0
+    mensagem1 = ''
+    mensagem2 = ''
 
     gStateMachine = StateMachine {
         ['title'] = function() return TitleState() end,
@@ -104,69 +109,40 @@ function love.update(dt)
 
     gStateMachine:update(dt)
 
-    dtotal = dtotal + dt
-
-    -- ao passar 2s
-    if dtotal >= 2 then
-
-        -- muda baralho
-        baralho:muda()
-
-        -- atualiza contador e monte
-        dtotal = dtotal - 2
-        contador = contador + 1
-        monte = monte + 1
-        if contador > 13 then
-            contador = 1
-        end
-
-        sounds[contador]:play()
-
-    end
-
-    -- analisa a primeira tecla da queue
-    -- se for A, E, D
-        -- se queimou
-        -- else se for A
-        -- else se for E
-        -- else se for D
-    -- se for RETURN BACKSPACE SHIFT
-        -- se queimou
-        -- else se for RETURN
-        -- else se for BACKSPACE
-        -- else se for SHIFT
-
-    -- se a tecla A for pressionada (attack jogador1)
-    if love.keyboard.wasPressed('a') then
-        -- só deixar 1 vez
-        -- animaçao de tapa
-        jogador1:animar()
-    end
-
-    if love.keyboard.wasPressed('return') then
-        -- só deixar 1 vez
-        -- animaçao de tapa
-        jogador2:animar()
-        
-    end
-    love.keyboard.keysPressed = {}
-
     jogador1:update(dt)
     jogador2:update(dt)
+    
+    love.keyboard.keysPressed = {}
     
 end
 
 function love.draw()
 
-
-    
     love.graphics.clear(126/255, 161/255, 255/255, 1)
     baralho:render()
+    -- fazer render em ordem de tecla pressionada
+
+
+    -- se jogador 1 antes
     jogador1:render()
     jogador2:render()
+    -- else
+        jogador2:render()
+        jogador1:render()
+
     love.graphics.setColor(1,1,1,1)
     love.graphics.print(tostring(contador), WINDOW_WIDTH*2/3, WINDOW_HEIGHT/4)
     love.graphics.print(tostring(monte), WINDOW_WIDTH*2/3, WINDOW_HEIGHT*2/4)
     love.graphics.print(tostring(pontosJogador1) .. " vs " .. tostring(pontosJogador2), WINDOW_WIDTH*2/3, WINDOW_HEIGHT*3/4)
     gStateMachine:render()
+end
+
+
+function inTable(table, val)
+    for i, v in ipairs(table) do
+        if v == val then
+            return true
+        end
+    end
+    return false
 end
