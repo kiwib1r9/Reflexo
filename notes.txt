@@ -1,3 +1,10 @@
 maos devem voltar juntas
 animacao repetida nao
 queue
+
+
+states:
+    inicio
+    test-round
+    point-round
+    end

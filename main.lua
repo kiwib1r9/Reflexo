@@ -2,6 +2,11 @@ Class = require 'class'
 require 'Mao'
 require 'Baralho'
 
+require 'StateMachine'
+require 'states/BaseState'
+require 'states/InicioState'
+require 'states/TesteState'
+
 function love.load()
 
     -- random seed 
@@ -63,10 +68,20 @@ function love.load()
     contador = 0
     dtotal = 0
     monte = 0
-    pontosJogador1 = 0
-    pontosJogador2 = 0
+    pontosJogador1 = 10
+    pontosJogador2 = 9
+
+    gStateMachine = StateMachine {
+        ['title'] = function() return TitleState() end,
+        ['inicio'] = function() return InicioState() end,
+        ['teste'] = function() return TesteState() end,
+        ['point'] = function() return PointState() end,
+        ['end'] = function () return EndState() end
+    }
+    gStateMachine:change('inicio')
 
     love.keyboard.keysPressed = {}
+    keyQueue = {}
 
     
 end
@@ -76,6 +91,9 @@ function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
     end
+
+    table.insert(keyQueue, key)
+
 end
 
 function love.keyboard.wasPressed(key)
@@ -84,59 +102,63 @@ end
 
 function love.update(dt)
 
-    jogador1:update(dt)
-    jogador2:update(dt)
+    gStateMachine:update(dt)
+
     dtotal = dtotal + dt
+
+    -- ao passar 2s
     if dtotal >= 2 then
+
+        -- muda baralho
         baralho:muda()
+
+        -- atualiza contador e monte
         dtotal = dtotal - 2
         contador = contador + 1
         monte = monte + 1
         if contador > 13 then
             contador = 1
         end
+
         sounds[contador]:play()
+
     end
 
+    -- analisa a primeira tecla da queue
+    -- se for A, E, D
+        -- se queimou
+        -- else se for A
+        -- else se for E
+        -- else se for D
+    -- se for RETURN BACKSPACE SHIFT
+        -- se queimou
+        -- else se for RETURN
+        -- else se for BACKSPACE
+        -- else se for SHIFT
+
+    -- se a tecla A for pressionada (attack jogador1)
     if love.keyboard.wasPressed('a') then
         -- só deixar 1 vez
         -- animaçao de tapa
         jogador1:animar()
-        if contador ~= baralho.numero then
-            monte = monte + pontosJogador1
-            pontosJogador1 = 0
-            -- queimou!! perde todos os pontos para a mesa
-            print("queimou")
-        else 
-            pontosJogador1 = pontosJogador1 + monte
-            monte = 0
-            print("attack")
-            -- pontua o numero de cartas do monte
-        end
     end
 
     if love.keyboard.wasPressed('return') then
         -- só deixar 1 vez
         -- animaçao de tapa
         jogador2:animar()
-        if contador ~= baralho.numero then
-            monte = monte + pontosJogador2
-            pontosJogador2 = 0
-            -- queimou!! perde todos os pontos para a mesa
-            print("queimou")
-        else 
-            pontosJogador2 = pontosJogador2 + monte
-            monte = 0
-            print("attack")
-            -- pontua o numero de cartas do monte
-        end
+        
     end
     love.keyboard.keysPressed = {}
 
- 
+    jogador1:update(dt)
+    jogador2:update(dt)
+    
 end
 
 function love.draw()
+
+
     
     love.graphics.clear(126/255, 161/255, 255/255, 1)
     baralho:render()
@@ -145,5 +167,6 @@ function love.draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.print(tostring(contador), WINDOW_WIDTH*2/3, WINDOW_HEIGHT/4)
     love.graphics.print(tostring(monte), WINDOW_WIDTH*2/3, WINDOW_HEIGHT*2/4)
-    love.graphics.print(tostring(pontosJogador1), WINDOW_WIDTH*2/3, WINDOW_HEIGHT*3/4)
+    love.graphics.print(tostring(pontosJogador1) .. " vs " .. tostring(pontosJogador2), WINDOW_WIDTH*2/3, WINDOW_HEIGHT*3/4)
+    gStateMachine:render()
 end
