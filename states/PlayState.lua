@@ -1,17 +1,45 @@
-PointState = Class{__includes = BaseState}
+PlayState = Class{__includes = BaseState}
 
-function PointState:update(dt)
+PLAY_TIME = 2
 
-    dtotal = dtotal + dt
-    --ao passar 2s
-    if dtotal >= 2 then
-        -- se houver tecla
+function PlayState:init()
+    self.dtotal = 0
+
+    baralho:muda()
+    contador = 1
+    sounds[contador]:play()
+    monte = monte + 1
+
+    keyQueue = {}
+    jogador1.free = true
+    jogador2.free = true
+
+    self.reiniciar = false
+
+end
+
+function PlayState:update(dt)
+
+    self.dtotal = self.dtotal + dt
+
+    -- ao passar tempo da rodada
+
+    if self.dtotal >= PLAY_TIME then
+        mensagem1 = ''
+        mensagem2 = ''
+
+        jogador1.free = false
+        jogador2.free = false
+
+        self.reiniciar = false
+
+        -- se houve tecla
         if #keyQueue > 0 then
-            ------------------------------ SITUAÇÃO MONTE -------------------------------
-            if baralho.numero == contador then
+
+             ------------------------------ SITUAÇÃO MONTE -------------------------------
+             if baralho.numero == contador then
                 -- se a primeira tecla for A
                 if keyQueue[1] == 'a' then
-                    
                     -- jogador1 leva o monte
                     pontosJogador1 = pontosJogador1 + monte
                     -- muda topo
@@ -19,6 +47,7 @@ function PointState:update(dt)
                     -- render mensagem
                     mensagem1 = "Ataque!"
                     monte = 0
+                    self.reiniciar = true
 
                 -- se a primeira tecla for RETURN
                 elseif keyQueue[1] == 'return' then
@@ -30,9 +59,9 @@ function PointState:update(dt)
                     -- render mensagem
                     mensagem2 = "Ataque!"
                     monte = 0
+                    self.reiniciar = true
                 end
             end
-
             ------------------------------ SITUAÇÃO DEFESA 1 -------------------------------
             if topoJogador1 == contador then 
                 -- se a primeira tecla for BACKSPACE
@@ -46,6 +75,8 @@ function PointState:update(dt)
                     topoJogador1 = 0
                     -- render mensagem
                     mensagem2 = "Ataque surpresa!"
+                    self.reiniciar = true
+
                     -- se a primeira tecla for D
                 elseif keyQueue[1] == 'd' then
                     
@@ -58,9 +89,11 @@ function PointState:update(dt)
                     monte = monte + pontosJogador2
                     pontosJogador2 = 0
                     topoJogador2 = 0
+                    mensagem2 = "Queimou!"
+                    
                 end
             end
-        
+
             ------------------------------ SITUAÇÃO DEFESA 2 -------------------------------
             if topoJogador2 == contador then 
                 -- se a primeira tecla for E
@@ -74,7 +107,9 @@ function PointState:update(dt)
                     topoJogador2 = 0
                     -- render mensagem
                     mensagem1 = "Ataque surpresa!"
+                    self.reiniciar = true
                     -- se a primeira tecla for D
+                    
                 elseif keyQueue[1] == 'shift' then
                     
                 -- render mensagem
@@ -86,19 +121,57 @@ function PointState:update(dt)
                     monte = monte + pontosJogador1
                     pontosJogador1 = 0
                     topoJogador1 = 0
+                    mensagem1 = "Queimou!"
+                    
                 end
             end
-            count = 0
-            keyQueue = {}
-            jogador1.free = false
-            jogador2.free = false
-            gStateMachine:change('count')
+
+            ------------------------------ QUEIMADA -------------------------------
+            
+            if inTable(keyQueue ,'a') or inTable(keyQueue ,'e') or inTable(keyQueue ,'d') then
+                monte = monte + pontosJogador1
+                pontosJogador1 = 0
+                topoJogador1 = 0
+                mensagem1 = "Queimou!"
+                
+            end
+    
+            if inTable(keyQueue ,'return') or inTable(keyQueue ,'rshift') or inTable(keyQueue ,'backspace') then
+                monte = monte + pontosJogador2
+                pontosJogador2 = 0
+                topoJogador2 = 0
+
+                -- render mensagem
+                mensagem2 = "Queimou!"
+                
+            end
+            jogador1:reset()
+            jogador2:reset()
+            
         end
-        gStateMachine:change('teste')
+
+        if self.reiniciar then
+            gStateMachine:change('count')
+        else
+            -- atualiza tempo corrido 
+            self.dtotal = self.dtotal % 2
+
+            -- atualiza contadores 
+            baralho:muda()
+            contador = (contador %13) + 1
+            monte = monte + 1
+            sounds[contador]:play()
+
+            -- habilita movimentos
+            jogador1.free = true
+            jogador2.free = true
+        end
+
+        keyQueue = {}
+
     end
-        
 end
 
-function PointState:render()
+function PlayState:render()
 
 end

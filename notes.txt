@@ -1,10 +1,12 @@
-maos devem voltar juntas
-animacao repetida nao
-queue
+a fazer: trabalhar no render e impressoes dos arquivos
 
+problema nas animaçeos
 
 states:
     inicio
     test-round
     point-round
     end
+
+
+ 

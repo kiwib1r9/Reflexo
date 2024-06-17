@@ -21,23 +21,27 @@ function TesteState:update(dt)
         if baralho.numero == contador or topoJogador1 == contador or topoJogador2 == contador then
             gStateMachine:change('point')
         end
-    end
 
-    if inTable(keyQueue ,'a') then
+        if inTable(keyQueue ,'a') or inTable(keyQueue ,'e') or inTable(keyQueue ,'d') then
             monte = monte + pontosJogador1
             pontosJogador1 = 0
             topoJogador1 = 0
-    end
-    if inTable(keyQueue ,'return') then
+            --jogador1:reset()
+        end
+
+        if inTable(keyQueue ,'return') or inTable(keyQueue ,'rshift') or inTable(keyQueue ,'backspace') then
             monte = monte + pontosJogador2
             pontosJogador2 = 0
             topoJogador2 = 0
-    end
+            --jogador2:reset()
+        end
 
+        keyQueue={}
+
+    end
 
 end
 
 function TesteState:render()
-  love.graphics.print('inicio', 20, 64)
-  love.graphics.print(tostring(count), 20, 100)
+
 end

@@ -1,6 +1,10 @@
 Baralho = Class{}
 
+local CARD_IMAGE = love.graphics.newImage('img/copas-resized.png')
+
+
 function Baralho:init(x,y,largura,altura,numero,naipe)
+    self.image = CARD_IMAGE
     self.x = x
     self.y = y
     self.largura = largura 
@@ -24,8 +28,9 @@ end
 
 function Baralho:render()
 
-    love.graphics.setColor(1,0,128/255,1)
-    love.graphics.rectangle('fill', self.x, self.y, self.largura, self.altura)
+    --love.graphics.setColor(1,0,128/255,1)
+    love.graphics.draw(self.image,self.x,self.y)
+    --love.graphics.rectangle('fill', self.x, self.y, self.largura, self.altura)
     love.graphics.setColor(1,1,1,1)
     love.graphics.print(tostring(self.numero), self.x + 20, self.y +20)
 end
