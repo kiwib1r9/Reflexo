@@ -10,7 +10,7 @@ require 'StateMachine'
 require 'states/BaseState'
 require 'states/CountDownState'
 require 'states/MenuState'
-require 'states/TesteState'
+require 'states/PlayState'
 require 'states/PointState'
 
 function love.load()
@@ -81,28 +81,29 @@ function love.load()
     jogador1 = Mao(1)
     pontosJogador1 = 0
     topoJogador1 = 0
-    mensagem1 = ''
+    mensagem1 = nil
    -- monte do jogador 1
 
     -- JOGADOR 2
     jogador2 = Mao(2)
     pontosJogador2 = 0
     topoJogador2 = 0
-    mensagem2 = ''
+    mensagem2 = nil
    -- monte do jogador 2
 
     -- BARALHO
-    baralho = Baralho(cardX,cardY,cardWidth,cardHeight,0,1)
+    baralho = Baralho(cardX,cardY,0)
 
     -- GLOBAIS
     monte = 0
     count = 0
     contador = 0
-
+    reiniciar = false
     primeiro = 1
 
     -- inicialização das fontes
     numFont = love.graphics.newFont('coolslim/Coolslim.otf', 100)
+    cardNumFont = love.graphics.newFont('coolslim/Coolslim.otf', 70)
     mediumFont = love.graphics.newFont('slim_chef/Slim Chef -personal use.ttf', 14)
     titleFont = love.graphics.newFont('slim_chef/Slim Chef -personal use.ttf', 300)
     --flappyFont = love.graphics.newFont('flappy.ttf', 28)
@@ -137,14 +138,15 @@ function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
     end
-    if #keyQueue == 0 then
-        if key == 'a' or key == 'd' or key == 'e' then
-            primeiro = 1
-        else
-            primeiro = 2
-        end
-    end
+    -- se esta em partida e nenuma tecla foi diitada
+    -- playstate
+    -- loica primeiro e de mensaem//pontuaçao
     table.insert(keyQueue, key)
+
+    if gStateMachine.name == 'play' then
+        testa(key)
+    end
+
 
 end
 
@@ -183,13 +185,13 @@ function love.draw()
     -- fazer render em ordem de tecla pressionada
     -- se jogador 1 antes
     
-    -- if primeiro == 1 then 
-         jogador1:render()
-         jogador2:render()
-    -- else
-    --     jogador2:render()
-    --     jogador1:render()
-    -- end
+    if primeiro == 1 then 
+        jogador1:render()
+        jogador2:render()
+    else
+        jogador2:render()
+        jogador1:render()
+    end
 
 
     love.graphics.setColor(1,1,1,1)
@@ -197,13 +199,13 @@ function love.draw()
     -- mensagens
 
     love.graphics.setFont(mediumFont)
-    if mensagem1 ~= '' then
-        love.graphics.print(mensagem1, 20, 600)
-    end
+    -- if mensagem1 ~= '' then
+    --     love.graphics.print(mensagem1, 20, 600)
+    -- end
 
-    if mensagem2 ~= '' then
-        love.graphics.print(mensagem2, 520, 600)
-    end
+    -- if mensagem2 ~= '' then
+    --     love.graphics.print(mensagem2, 520, 600)
+    -- end
 
     --love.graphics.setFont(numFont)
     --love.graphics.print(tostring(baralho.numero), WINDOW_WIDTH*2/3, WINDOW_HEIGHT/4)
@@ -251,4 +253,131 @@ function love.mousepressed(x, y, button, istouch, presses)
             end
         end
     end
+end
+
+function testa(char)
+------------------------------ SITUAÇÃO MONTE -------------------------------
+
+    if #keyQueue == 1 then
+        if baralho.numero == contador then
+            -- se a primeira tecla for A
+            if char == 'a' then
+                -- jogador1 leva o monte
+                pontosJogador1 = pontosJogador1 + monte
+                -- muda topo
+                topoJogador1 = baralho.numero
+                -- render mensagem
+                mensagem1 = 'reflexo'
+                monte = 0
+                primeiro = 1
+                reiniciar = true
+
+            -- se a primeira tecla for RETURN
+            elseif char == 'return' then           
+                -- jogador2 leva o monte
+                pontosJogador2 = pontosJogador2 + monte
+                -- muda topo
+                topoJogador2 = baralho.numero
+                -- render mensagem
+                mensagem2 = 'reflexo'
+                monte = 0
+                primeiro = 2
+                reiniciar = true
+            end
+        end
+            
+        ------------------------------ SITUAÇÃO DEFESA 1 -------------------------------
+        if topoJogador1 == contador then 
+            -- se a primeira tecla for BACKSPACE
+            if char == 'backspace' then
+                
+                -- jogador2 leva pontos do jogador1
+                pontosJogador2 = pontosJogador2 + pontosJogador1
+                pontosJogador1 = 0
+                -- muda topo
+                topoJogador2 = topoJogador1
+                topoJogador1 = 0
+                -- render mensagem
+                mensagem2 = 'ataque'
+                primeiro = 2
+                reiniciar = true
+
+                -- se a primeira tecla for D
+            elseif char == 'd' then
+                
+            -- render mensagem
+            mensagem1 = 'defesa'
+            primeiro = 1
+            end
+        else 
+            if char == 'backspace' then
+                
+                monte = monte + pontosJogador2
+                pontosJogador2 = 0
+                topoJogador2 = 0
+                mensagem2 = 'queimou'
+                primeiro = 2
+                
+            end
+        end
+        ------------------------------ SITUAÇÃO DEFESA 2 -------------------------------
+        if topoJogador2 == contador then 
+            -- se a primeira tecla for E
+            if char == 'e' then  
+                -- jogador1 leva pontos do jogador2
+                pontosJogador1 = pontosJogador1 + pontosJogador2
+                pontosJogador2 = 0
+                -- muda topo
+                topoJogador1 = topoJogador2
+                topoJogador2 = 0
+                -- render mensagem
+                mensagem1 = 'ataque'
+                primeiro = 1
+                reiniciar = true
+
+            -- se a primeira tecla for D
+                        
+            elseif char == 'shift' then
+                        
+                -- render mensagem
+                primeiro = 2
+                mensagem2 = 'defesa'
+            end
+        else 
+            if char == 'e' then
+                        
+                monte = monte + pontosJogador1
+                pontosJogador1 = 0
+                topoJogador1 = 0
+                primeiro = 1
+                mensagem1 = 'queimou'
+                        
+            end
+        end
+    end
+    ------------------------------ QUEIMADA ------------------------------- 
+    if baralho.numero ~= contador then       
+        if char == 'a' or char == 'e' or char == 'd' then
+            monte = monte + pontosJogador1
+            pontosJogador1 = 0
+            topoJogador1 = 0
+            if #keyQueue == 1 then
+                primeiro = 1
+            end
+            mensagem1 = 'queimou'
+            
+        end
+
+        if char == 'return' or char == 'rshift' or char == 'backspace' then
+            monte = monte + pontosJogador2
+            pontosJogador2 = 0
+            topoJogador2 = 0
+            if #keyQueue == 1 then
+                primeiro = 2
+            end
+            -- render mensagem
+            mensagem2 = 'queimou'     
+        end
+    end
+
 end

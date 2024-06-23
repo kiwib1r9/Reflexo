@@ -36,7 +36,7 @@ function Mao:init(player)
 
     end
 
-    -- self.tempo = 0
+    self.tempo = 0
     self.rotation = math.rad(self.fator * 30)
     self.inicialX = self.x 
     self.inicialY = self.y
@@ -47,15 +47,15 @@ function Mao:init(player)
 
     self.waveTime = 0
 
-    -- self.tapa = false
-    -- self.bloqueio = false
-    -- self.inimigo = false
+    self.tapa = false
+    self.bloqueio = false
+    self.inimigo = false
 
-    -- self.duracao = 0.1
+    self.duracao = 0.1
 
-    -- self.wait3s = false
+    self.wait3s = false
 
-    -- self.free = false
+    self.free = false
 
 end
 
@@ -95,56 +95,56 @@ end
 
 function Mao:update(dt)
 
-    -- if self.tapa then
-    --     self.tempo = self.tempo + dt
-    --     self.y = self.y + self.dy * dt
-    --     self.x = self.x + self.dx * dt
-    --     if self.tempo >= self.duracao then
-    --         self.tapa = false
-    --     end
-    -- end
+    if self.tapa then
+        self.tempo = self.tempo + dt
+        self.y = self.y - 1500 * dt
+        self.x = self.x + self.fator * 1800 * dt
+        if self.tempo >= self.duracao then
+            self.tapa = false
+        end
+    end
 
-    -- if self.inimigo then
-    --     self.tempo = self.tempo + dt
-    --     self.x = self.x + self.dx * dt
-    --     if self.tempo >= self.duracao then
-    --         self.inimigo = false
-    --     end
-    -- end
+    if self.inimigo then
+        self.tempo = self.tempo + dt
+        self.x = self.x + self.dx * dt
+        if self.tempo >= self.duracao then
+            self.inimigo = false
+        end
+    end
 
-    -- if self.bloqueio then
-    --     self.tempo = self.tempo + dt
-    --     self.y = self.y + self.dy * dt
-    --     if self.tempo >= self.duracao then
-    --         self.bloqueio = false
-    --     end
-    -- end
+    if self.bloqueio then
+        self.tempo = self.tempo + dt
+        self.y = self.y + self.dy * dt
+        if self.tempo >= self.duracao then
+            self.bloqueio = false
+        end
+    end
 
-    -- if self.wait3s then
-    --     self.tempo = self.tempo + dt
-    --     if self.tempo >= 1 then
-    --         self.wait3s = false
-    --         self:reset()
-    --     end
-    -- end
+    if self.wait3s then
+        self.tempo = self.tempo + dt
+        if self.tempo >= 1 then
+            self.wait3s = false
+            self:reset()
+        end
+    end
 
     -- ---------------- ANIMAÇÕES -----------------
-    -- if self.free then 
-    --     -- se a tecla ataque for pressionada
-    --     if love.keyboard.wasPressed(self.ataque) then
-    --         self.free = false
-    --         self.tapa = true
-    --         self.tempo = 0
-    --     elseif love.keyboard.wasPressed(self.defesa) then
-    --         self.free = false
-    --         self.bloqueio = true
-    --         self.tempo = 0
-    --     elseif love.keyboard.wasPressed(self.ataque_inimigo) then
-    --         self.free = false
-    --         self.inimigo = true
-    --         self.tempo = 0
-    --     end
-    -- end
+    if self.free then 
+        -- se a tecla ataque for pressionada
+        if love.keyboard.wasPressed(self.ataque) then
+            self.free = false
+            self.tapa = true
+            self.tempo = 0
+        elseif love.keyboard.wasPressed(self.defesa) then
+            self.free = false
+            self.bloqueio = true
+            self.tempo = 0
+        elseif love.keyboard.wasPressed(self.ataque_inimigo) then
+            self.free = false
+            self.inimigo = true
+            self.tempo = 0
+        end
+    end
 
 end
 

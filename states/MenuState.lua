@@ -41,6 +41,7 @@ function MenuState:init()
         ["tutorial"] = { x = self.tutorialX, y = self.tutorialY, width = self.tutorialWidth, height = self.tutorialHeight, image = self.tutorial},
         ["sair"] = { x = self.sairX, y = self.sairY, width = self.sairWidth, height = self.sairHeight, image = self.sair} 
     }
+    menu = self.menu
 
 
 end
