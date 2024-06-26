@@ -3,6 +3,7 @@ local ATAQUE = love.graphics.newImage('img/ataque.jpg')
 local REFLEXO = love.graphics.newImage('img/reflexo.jpg')
 local DEFESA = love.graphics.newImage('img/defesa.jpg')
 local QUEIMOU = love.graphics.newImage('img/queimou.jpg')
+
 PLAY_TIME = 2
 
 function PlayState:init()
@@ -182,6 +183,9 @@ function PlayState:update(dt)
 end
 
 function PlayState:render()
+    -- render monte
+    --love.graphics.rectangle('fill',  200, WINDOW_HEIGHT - 40 - 120, 81, 120)
+    --love.graphics.rectangle('fill', WINDOW_WIDTH - 200 - 81, WINDOW_HEIGHT - 40 - 120, 81, 120)
     -- love.graphics.setFont(cardNumFont)
     -- love.graphics.print(pontosJogador1, 20, 300)
     -- love.graphics.print(pontosJogador2, 420, 300)

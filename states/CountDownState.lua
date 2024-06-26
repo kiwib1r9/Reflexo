@@ -34,7 +34,7 @@ end
 function CountDownState:render()
     love.graphics.setFont(numFont)
     if self.count > 0 then
-        love.graphics.print(tostring(self.count), 40, 20)
+        love.graphics.print(tostring(self.count), WINDOW_WIDTH/2 - 20 , WINDOW_HEIGHT/2 - 130)
     --else
         
         --love.graphics.print('VAI!', 40, 20)

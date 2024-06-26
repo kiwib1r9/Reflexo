@@ -53,7 +53,6 @@ function Mao:init(player)
 
     self.duracao = 0.1
 
-    self.wait3s = false
 
     self.free = false
 
@@ -106,7 +105,7 @@ function Mao:update(dt)
 
     if self.inimigo then
         self.tempo = self.tempo + dt
-        self.x = self.x + self.dx * dt
+        self.x = self.x + self.fator * 2100 * dt
         if self.tempo >= self.duracao then
             self.inimigo = false
         end
@@ -114,17 +113,9 @@ function Mao:update(dt)
 
     if self.bloqueio then
         self.tempo = self.tempo + dt
-        self.y = self.y + self.dy * dt
+        self.x = self.x + self.fator * 1100 * dt
         if self.tempo >= self.duracao then
             self.bloqueio = false
-        end
-    end
-
-    if self.wait3s then
-        self.tempo = self.tempo + dt
-        if self.tempo >= 1 then
-            self.wait3s = false
-            self:reset()
         end
     end
 
