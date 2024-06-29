@@ -10,6 +10,7 @@ function CountDownState:init()
     jogador2:reset()
     jogador1.free = false
     jogador2.free = false
+    reiniciar = false
 end
 
 function CountDownState:update(dt)

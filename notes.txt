@@ -8,5 +8,7 @@ states:
     point-round
     end
 
-
+ideias de updates futuros:
+aumentar a velocidade da narraçao conforme o tempo passa
+cartas coringas com poderes especiais 
  

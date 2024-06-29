@@ -189,11 +189,11 @@ function love.draw()
 
     love.graphics.clear(0,0,0,1)
 
-    monte1:render()
-    monte2:render()
-    --if monte > 0 then
-    baralho:render()
-    --end
+    -- monte1:render()
+    -- monte2:render()
+    
+    -- baralho:render()
+    
     gStateMachine:render()
     -- if topoJogador1.num > 0 then
         -- render monte1
@@ -276,8 +276,94 @@ end
 function testa(char)
 ------------------------------ SITUAÇÃO MONTE -------------------------------
 
+    
+
+    ------------------------------ QUEIMADA ------------------------------- 
+    if baralho.numero ~= contador then  
+     
+        if char == 'a' then
+            monte = monte + pontosJogador1
+            pontosJogador1 = 0
+            --topoJogador1 = Topo(0,0)
+            monte1:set(0,0)
+            if #keyQueue == 1 then
+                primeiro = 1
+            end
+            mensagem1 = 'queimou'
+            
+        end
+
+        if char == 'return' then
+            monte = monte + pontosJogador2
+            pontosJogador2 = 0
+            --topoJogador2 = Topo(0,0)
+            monte2:set(0,0)
+            if #keyQueue == 1 then
+                primeiro = 2
+            end
+            -- render mensagem
+            mensagem2 = 'queimou'     
+        end
+    end
+
+    if monte1.numero ~= contador then 
+
+        if char == 'd' then
+            monte = monte + pontosJogador1
+            pontosJogador1 = 0
+            --topoJogador1 = Topo(0,0)
+            monte1:set(0,0)
+            if #keyQueue == 1 then
+                primeiro = 1
+            end
+            mensagem1 = 'queimou'
+            
+        end
+
+        if char == 'backspace' then
+            monte = monte + pontosJogador2
+            pontosJogador2 = 0
+            --topoJogador2 = Topo(0,0)
+            monte2:set(0,0)
+            if #keyQueue == 1 then
+                primeiro = 2
+            end
+            -- render mensagem
+            mensagem2 = 'queimou'     
+        end
+    end
+
+    if monte2.numero ~= contador then
+
+        if char == 'e' then
+            monte = monte + pontosJogador1
+            pontosJogador1 = 0
+            --topoJogador1 = Topo(0,0)
+            monte1:set(0,0)
+            if #keyQueue == 1 then
+                primeiro = 1
+            end
+            mensagem1 = 'queimou'
+            
+        end
+
+        if char == 'rshift' then
+            monte = monte + pontosJogador2
+            pontosJogador2 = 0
+            --topoJogador2 = Topo(0,0)
+            monte2:set(0,0)
+            if #keyQueue == 1 then
+                primeiro = 2
+            end
+            -- render mensagem
+            mensagem2 = 'queimou'     
+        end
+    end
+
     if #keyQueue == 1 then
+
         if baralho.numero == contador then
+            --print("bar")
             -- se a primeira tecla for A
             if char == 'a' then
                 -- jogador1 leva o monte
@@ -307,6 +393,7 @@ function testa(char)
             
         ------------------------------ SITUAÇÃO DEFESA 1 -------------------------------
         if monte1.numero == contador then 
+            --print("monte1")
             -- se a primeira tecla for BACKSPACE
             if char == 'backspace' then
                 
@@ -350,6 +437,7 @@ function testa(char)
         -- end
         ------------------------------ SITUAÇÃO DEFESA 2 -------------------------------
         if monte2.numero == contador then 
+            --print("monte2")
             -- se a primeira tecla for E
             if char == 'e' then  
                 -- jogador1 leva pontos do jogador2
@@ -385,83 +473,6 @@ function testa(char)
                         
         --     end
         -- end
-    end
-    ------------------------------ QUEIMADA ------------------------------- 
-    if baralho.numero ~= contador then       
-        if char == 'a' then
-            monte = monte + pontosJogador1
-            pontosJogador1 = 0
-            --topoJogador1 = Topo(0,0)
-            monte1:set(0,0)
-            if #keyQueue == 1 then
-                primeiro = 1
-            end
-            mensagem1 = 'queimou'
-            
-        end
-
-        if char == 'return' then
-            monte = monte + pontosJogador2
-            pontosJogador2 = 0
-            --topoJogador2 = Topo(0,0)
-            monte2:set(0,0)
-            if #keyQueue == 1 then
-                primeiro = 2
-            end
-            -- render mensagem
-            mensagem2 = 'queimou'     
-        end
-    end
-
-    if monte1.numero ~= contador then 
-        if char == 'd' then
-            monte = monte + pontosJogador1
-            pontosJogador1 = 0
-            --topoJogador1 = Topo(0,0)
-            monte1:set(0,0)
-            if #keyQueue == 1 then
-                primeiro = 1
-            end
-            mensagem1 = 'queimou'
-            
-        end
-
-        if char == 'backspace' then
-            monte = monte + pontosJogador2
-            pontosJogador2 = 0
-            --topoJogador2 = Topo(0,0)
-            monte2:set(0,0)
-            if #keyQueue == 1 then
-                primeiro = 2
-            end
-            -- render mensagem
-            mensagem2 = 'queimou'     
-        end
-    end
-    if monte2.numero ~= contador then
-        if char == 'e' then
-            monte = monte + pontosJogador1
-            pontosJogador1 = 0
-            --topoJogador1 = Topo(0,0)
-            monte1:set(0,0)
-            if #keyQueue == 1 then
-                primeiro = 1
-            end
-            mensagem1 = 'queimou'
-            
-        end
-
-        if char == 'rshift' then
-            monte = monte + pontosJogador2
-            pontosJogador2 = 0
-            --topoJogador2 = Topo(0,0)
-            monte2:set(0,0)
-            if #keyQueue == 1 then
-                primeiro = 2
-            end
-            -- render mensagem
-            mensagem2 = 'queimou'     
-        end
     end
 
 end

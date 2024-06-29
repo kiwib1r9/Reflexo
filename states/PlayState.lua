@@ -23,7 +23,7 @@ function PlayState:init()
     jogador1.free = true
     jogador2.free = true
 
-    self.reiniciar = false
+    reiniciar = false
 
 end
 
@@ -40,7 +40,7 @@ function PlayState:update(dt)
         jogador1.free = false
         jogador2.free = false
 
-        self.reiniciar = false
+        --reiniciar = false
 
         -- se houve tecla
         if #keyQueue > 0 then
@@ -154,21 +154,24 @@ function PlayState:update(dt)
             --     end
             -- end
 
-
+            monte1:atualiza()
+            monte2:atualiza()
             jogador1:reset()
             jogador2:reset()
             
         end
+        
 
-        if self.reiniciar then
+        if reiniciar then
             gStateMachine:change('count')
         else
+
             -- atualiza tempo corrido 
             self.dtotal = self.dtotal % 2
 
             -- atualiza contadores 
-            baralho:muda()
             contador = (contador %13) + 1
+            baralho:muda()
             monte = monte + 1
             sounds[contador]:play()
 
@@ -178,11 +181,16 @@ function PlayState:update(dt)
         end
 
         keyQueue = {}
+        
 
     end
 end
 
 function PlayState:render()
+    monte1:render()
+    monte2:render()
+    
+    baralho:render()
     -- render monte
     --love.graphics.rectangle('fill',  200, WINDOW_HEIGHT - 40 - 120, 81, 120)
     --love.graphics.rectangle('fill', WINDOW_WIDTH - 200 - 81, WINDOW_HEIGHT - 40 - 120, 81, 120)

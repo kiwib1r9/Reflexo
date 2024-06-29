@@ -16,6 +16,8 @@ local cardNumFont = love.graphics.newFont('coolslim/Coolslim.otf', 70)
 function Baralho:init(x,y,tipo)
     self.numero = 0
     self.naipe = 0
+    self.setNumero = 0
+    self.setNaipe = 0
     self.tipo = tipo
     self.x = x
     self.y = y
@@ -47,8 +49,13 @@ function Baralho:init(x,y,tipo)
 end
 
 function Baralho:set(x,y)
-    self.numero = x
-    self.naipe = y
+    self.setNumero = x
+    self.setNaipe = y
+end
+
+function Baralho:atualiza()
+    self.numero = self.setNumero
+    self.naipe = self.setNaipe
 end
 
 function Baralho:muda()
